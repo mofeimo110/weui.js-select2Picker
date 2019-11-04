@@ -6,6 +6,7 @@
             weui.select2Picker.initSelectChange();
             weui.select2Picker.initPcikerClick();
         },
+        // 给select控件注册事件，改变时修改显示的值
         initSelectChange: () => {
             const pickerDoms = $('[pickerfrom]');
             $.each(pickerDoms, (i, dom) => {
@@ -18,6 +19,7 @@
                 });
             });
         },
+        // 给显示控件注册点击事件，点击时生成picker的options，如果控件存在pickerdisabled类，则停止工作
         initPcikerClick: () => {
             $('[pickerfrom]').on('click', (e) => {
                 if ($(e.target).hasClass('pickerdisabled')) {
@@ -29,16 +31,18 @@
                 weui.select2Picker.showPicker(dom, values);
             });
         },
-        showPicker: (dom, values) => {
-            weui.picker(values, {
+        // 显示picker
+        showPicker: (dom, items, options) => {
+            weui.picker(items, $.extend({
                 id: new Date().valueOf(),
                 defaultValue: weui.select2Picker.getSelectValue(dom),
                 onConfirm: function (result) {
                     const val = result[result.length - 1].value;
                     weui.select2Picker.setValue(dom, val);
                 }
-            });
+            }, options));
         },
+        // picker的items去重
         uniqueOptions: values => {
             const newArr = [];
             values.forEach(x => {
@@ -58,6 +62,7 @@
             });
             return newArr;
         },
+        // 创建pickeritems，如果存在optgroup则生成两级item
         initPickerOptions: dom => {
             const $select = $(dom);
             let pickerOptions = [];
@@ -78,6 +83,7 @@
             }
             return pickerOptions;
         },
+        // 将option生成为item，如果有disabled则设置对应属性
         option2Picker: parent => {
             const $option = $(parent).find('option');
             const hadArr = [];
@@ -92,6 +98,7 @@
             });
             return hadArr;
         },
+        // 获取select当前的值，用作picker的默认值
         getSelectValue: dom => {
             const $this = $(dom);
             const val = $this.val();
@@ -105,6 +112,7 @@
             choose.push(val);
             return choose;
         },
+        // 给select赋值并且触发change事件
         setValue: (target, val) => {
             const $dom = $(target);
             if ($dom.is('select') || $dom.is('input')) {
