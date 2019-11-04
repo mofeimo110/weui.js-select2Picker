@@ -106,8 +106,8 @@
             if (!val) {
                 return choose;
             }
-            if ($this.find(':checked').data('categoryid')) {
-                choose.push($this.find(':checked').data('categoryid'));
+            if ($this.find(':checked').parent().attr('label')) {
+                choose.push($this.find(':checked').parent().attr('label'));
             }
             choose.push(val);
             return choose;
